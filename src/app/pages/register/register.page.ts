@@ -22,14 +22,36 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {
     this.credentialsRegister = this.fb.group({
-      name: ['name', [Validators.required, Validators.minLength(1)]],
+      //name: ['', [Validators.required, Validators.minLength(1)]],
       email: ['eve.holt@reqres.in', [Validators.required, Validators.email]],
-      password: ['cityslicka', [Validators.required, Validators.minLength(6)]]
+      password: ['pistol', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   async register() {
     console.log('Register');
+    //console.log('Name: ' + this.name.value);
+    console.log('Email: ' + this.email.value);
+    console.log('Password: ' + this.password.value);
+
+    const loading = await this.loadingController.create();
+    await loading.present();
+
+    this.authService.register(this.credentialsRegister.value).subscribe(
+      async (res) => {
+        await loading.dismiss();
+        this.router.navigateByUrl('/login', { replaceUrl: true });
+      },
+      async (res) => {
+        await loading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Register failed',
+          message: res.error.error,
+          buttons: ['OK'],
+        });
+        await alert.present();
+      }
+    );
   }
 
   get name() {
