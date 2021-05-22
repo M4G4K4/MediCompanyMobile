@@ -32,16 +32,25 @@ export class AuthenticationService {
     }
   }
 
-  login(credentials: {email, password}): Observable<any> {
+  login(credentials: {email; password}): Observable<any> {
     return this.http.post(`https://reqres.in/api/login`, credentials).pipe(
       map((data: any) => data.token),
-      switchMap(token => {
-        return from(Storage.set({key: TOKEN_KEY, value: token}));
-      }),
+      switchMap(token => from(Storage.set({key: TOKEN_KEY, value: token}))),
       tap(_ => {
         this.isAuthenticated.next(true);
       })
-    )
+    );
+  }
+
+  register(credentialsRegister: {name, email, password}): Observable<any>{
+    console.log(credentialsRegister);
+    return this.http.post(`https://reqres.in/api/register`, credentialsRegister).pipe(
+      map((data: any) => data.token),
+      switchMap(token => from(Storage.set({key: TOKEN_KEY, value: token}))),
+      tap(_ => {
+        this.isAuthenticated.next(true);
+      })
+    );
   }
 
   logout(): Promise<void> {

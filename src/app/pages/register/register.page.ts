@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AuthenticationService} from '../../services/authentication.service';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {Router} from '@angular/router';
-import {AuthenticationService} from '../../services/authentication.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-register',
+  templateUrl: './register.page.html',
+  styleUrls: ['./register.page.scss'],
 })
-export class LoginPage implements OnInit {
-  credentials: FormGroup;
+export class RegisterPage implements OnInit {
+  credentialsRegister: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -21,25 +21,31 @@ export class LoginPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.credentials = this.fb.group({
+    this.credentialsRegister = this.fb.group({
+      //name: ['', [Validators.required, Validators.minLength(1)]],
       email: ['eve.holt@reqres.in', [Validators.required, Validators.email]],
-      password: ['cityslicka', [Validators.required, Validators.minLength(6)]],
+      password: ['pistol', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  async login() {
+  async register() {
+    console.log('Register');
+    //console.log('Name: ' + this.name.value);
+    console.log('Email: ' + this.email.value);
+    console.log('Password: ' + this.password.value);
+
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.authService.login(this.credentials.value).subscribe(
+    this.authService.register(this.credentialsRegister.value).subscribe(
       async (res) => {
         await loading.dismiss();
-        this.router.navigateByUrl('/tabs', { replaceUrl: true });
+        this.router.navigateByUrl('/login', { replaceUrl: true });
       },
       async (res) => {
         await loading.dismiss();
         const alert = await this.alertController.create({
-          header: 'Login failed',
+          header: 'Register failed',
           message: res.error.error,
           buttons: ['OK'],
         });
@@ -48,16 +54,17 @@ export class LoginPage implements OnInit {
     );
   }
 
-  // Easy access for form fields
+  get name() {
+    return this.credentialsRegister.get('name');
+  }
+
   get email() {
-    return this.credentials.get('email');
+    return this.credentialsRegister.get('email');
   }
 
   get password() {
-    return this.credentials.get('password');
+    return this.credentialsRegister.get('password');
   }
 
-  goToRegister(){
-    this.router.navigateByUrl('/register', { replaceUrl: true });
-  }
+
 }
