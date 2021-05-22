@@ -20,14 +20,14 @@ const routes: Routes = [
     canLoad: [AuthGuard]
   },
   {
+    path: 'register',
+    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full'
-  },  {
-    path: 'register',
-    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
   }
-
 ];
 @NgModule({
   imports: [
