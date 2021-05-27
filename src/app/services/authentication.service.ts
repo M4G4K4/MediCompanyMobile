@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {map, switchMap, tap} from 'rxjs/operators';
 
 import {Plugins} from '@capacitor/core';
+import {environment} from 'src/environments/environment';
 
 const { Storage } = Plugins;
 const TOKEN_KEY = 'my-token';
@@ -33,8 +34,8 @@ export class AuthenticationService {
   }
 
   login(credentials: {email; password}): Observable<any> {
-    return this.http.post(`https://reqres.in/api/login`, credentials).pipe(
-      map((data: any) => data.token),
+    return this.http.post(environment.baseURL + '/login', credentials).pipe(
+      map((data: any) => data.api_token),
       switchMap(token => from(Storage.set({key: TOKEN_KEY, value: token}))),
       tap(_ => {
         this.isAuthenticated.next(true);
@@ -44,13 +45,20 @@ export class AuthenticationService {
 
   register(credentialsRegister: {name, email, password}): Observable<any>{
     console.log(credentialsRegister);
-    return this.http.post(`https://reqres.in/api/register`, credentialsRegister).pipe(
+    return this.http.post(environment.baseURL + `/register`, credentialsRegister).pipe(
       map((data: any) => data.token),
       switchMap(token => from(Storage.set({key: TOKEN_KEY, value: token}))),
       tap(_ => {
         this.isAuthenticated.next(true);
       })
     );
+  }
+
+  saveInfo(credentialsSaveInfo: {fullName,age,sex,NIF}, header): Observable<any>{
+    console.log(credentialsSaveInfo);
+    console.log(header);
+    const request = this.http.post(environment.baseURL + `/fillDetails`, credentialsSaveInfo,header);
+    return request;
   }
 
   logout(): Promise<void> {

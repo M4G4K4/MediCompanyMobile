@@ -6,8 +6,57 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- User icon , fields to input data , logout in the bottom-->
-<!-- NIF , IDADE , Morada -->
 <ion-content>
-  <ion-button expand="full" (click)="logout()">Logout</ion-button>
+
+  <form (ngSubmit)="saveInfo()" [formGroup]="credentialsSaveInfo">
+
+    <div class="input-group">
+
+      <ion-item>
+        <ion-input type="text" placeholder="Full Name" formControlName="fullName"></ion-input>
+      </ion-item>
+
+      <div *ngIf="(fullName.dirty || fullName.touched) && fullName.errors" class="errors">
+        <span *ngIf="fullName.errors?.required">Full Name is required</span>
+        <span *ngIf="fullName.errors?.fullName">Full Name is invalid</span>
+      </div>
+
+
+      <ion-item>
+        <ion-input type="number" placeholder="Age" formControlName="age"></ion-input>
+      </ion-item>
+
+      <div *ngIf="(age.dirty || age.touched) && age.errors" class="errors">
+        <span *ngIf="age.errors?.required">Age is required</span>
+        <span *ngIf="age.errors?.email">Age is invalid</span>
+      </div>
+
+      <ion-item>
+        <ion-input type="text" placeholder="sex" formControlName="sex"></ion-input>
+      </ion-item>
+
+      <div *ngIf="(sex.dirty || sex.touched) && sex.errors" class="errors">
+        <span *ngIf="sex.errors?.required">Sex is required</span>
+        <span *ngIf="sex.errors?.maxlength">Sex needs to be 1 characters</span>
+      </div>
+
+      <ion-item>
+        <ion-input type="text" placeholder="NIF" formControlName="NIF"></ion-input>
+      </ion-item>
+
+      <div *ngIf="(NIF.dirty || NIF.touched) && NIF.errors" class="errors">
+        <span *ngIf="NIF.errors?.required">NIF is required</span>
+        <span *ngIf="NIF.errors?.minlength">NIF needs to be 9 characters</span>
+        <span *ngIf="NIF.errors?.maxlength">NIF needs to be 9 characters</span>
+      </div>
+
+    </div>
+
+    <ion-button type="submit" expand="block" [disabled]="!credentialsSaveInfo.valid">
+      Save Info
+    </ion-button>
+
+  </form>
+
+  <ion-button  class="logoutBtn" expand="full" (click)="logout()">Logout</ion-button>
 </ion-content>

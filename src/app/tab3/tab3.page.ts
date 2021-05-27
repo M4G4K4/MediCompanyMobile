@@ -10,6 +10,10 @@ const HASH = 'hash';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
+  title = 'app';
+  elementType = 'url';
+  value = 'Techiediaries';
+
 
   constructor() {}
 

@@ -22,18 +22,13 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {
     this.credentialsRegister = this.fb.group({
-      //name: ['', [Validators.required, Validators.minLength(1)]],
-      email: ['eve.holt@reqres.in', [Validators.required, Validators.email]],
-      password: ['pistol', [Validators.required, Validators.minLength(6)]]
+      name: ['', [Validators.required, Validators.minLength(1)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(4)]]
     });
   }
 
   async register() {
-    console.log('Register');
-    //console.log('Name: ' + this.name.value);
-    console.log('Email: ' + this.email.value);
-    console.log('Password: ' + this.password.value);
-
     const loading = await this.loadingController.create();
     await loading.present();
 

@@ -12,16 +12,16 @@
 
     <div class="input-group">
 
-      <!--
+      
       <ion-item>
         <ion-input type="text" placeholder="Name" formControlName="name"></ion-input>
       </ion-item>
 
       <div *ngIf="(name.dirty || name.touched) && name.errors" class="errors">
-        <span *ngIf="name.errors?.required">Email is required</span>
-        <span *ngIf="name.errors?.email">Email is invalid</span>
+        <span *ngIf="name.errors?.required">Name is required</span>
+        <span *ngIf="name.errors?.email">Name is invalid</span>
       </div>
-      -->
+    
 
       <ion-item>
         <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
