@@ -1,15 +1,15 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      Scan Key
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
 
-  <div class="input-group">
-    <ngx-qrcode
+  <div class="qrcode">
+    <ngx-qrcode [width]="500"
       [elementType]="elementType"
       [value]="value"
       cssClass="aclass"

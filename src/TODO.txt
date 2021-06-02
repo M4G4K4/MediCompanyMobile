@@ -1,6 +1,5 @@
 request info e mostar nos campos da tab1
 save info encriptar (verificar se tem key ao não)
-colocar a -> token;key no qrcode
 
-#NO LOGIN
+# NO LOGIN
 verificar se é admin e se sim ir para um pag nova

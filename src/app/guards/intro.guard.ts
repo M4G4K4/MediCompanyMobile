@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {CanLoad, Router} from '@angular/router';
 import {Plugins} from '@capacitor/core';
 
-export const INTRO_KEY = 'into-seen';
+export const INTRO_KEY = 'intro-seen';
 const { Storage } = Plugins;
 
 @Injectable({

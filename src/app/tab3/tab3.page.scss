@@ -1,11 +1,11 @@
 ion-content {
   --padding-top: 40%;
   --padding-start: 10%;
-  --padding-end: 10%;}
+  --padding-end: 10%;
+}
 
-.qrcode {
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 15px;
+.qrcode{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

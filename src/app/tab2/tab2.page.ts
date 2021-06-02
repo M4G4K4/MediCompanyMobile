@@ -4,13 +4,9 @@ import {AuthenticationService} from '../services/authentication.service';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {Plugins} from '@capacitor/core';
-import {AES, enc} from 'crypto-js';
 
 const { Storage } = Plugins;
-const TOKEN_KEY = 'my-token';
-const HASH = 'hash';
-
-var hash;
+const KEY = 'KEY';
 
 @Component({
   selector: 'app-tab2',
@@ -41,9 +37,16 @@ export class Tab2Page {
 
 
   async generateKey() {
-    console.log('Phrase3: ' + this.credentialsGenerate.get('phrase3').value);
-
-    const token = await Storage.get({ key: TOKEN_KEY });
+    if(await this.keyAlreadyGenerated()){
+      console.log('Key already generated');
+      const alert = await this.alertController.create({
+        header: 'Generate Key',
+        message: 'Key already generated',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
     const key = this.credentialsGenerate.get('phrase1').value +
                 this.credentialsGenerate.get('phrase2').value +
                 this.credentialsGenerate.get('phrase3').value +
@@ -51,18 +54,18 @@ export class Tab2Page {
                 this.credentialsGenerate.get('phrase5').value +
                 this.credentialsGenerate.get('phrase6').value;
 
-    console.log('Key: ' + key);
-    console.log('Token: ' + token.value);
-
-    const encrypted = this.cryptoAES(token.value, key);
-    console.log('Encrypted: ' + encrypted);
-
-    const decrypted = this.decryptoAES(encrypted,key);
-    console.log('Decrypted: ' + decrypted);
-
-    Storage.set({key: HASH, value: encrypted});
+    console.log('KEY: ' + key);
+    await Storage.set({key: KEY, value: key});
   }
 
+  async keyAlreadyGenerated(){
+    const key = await Storage.get({key: KEY});
+    console.log(key);
+    return key.value != null;
+  }
+
+  // Not needed , remove this after
+  /*
   cryptoAES(texto, key) {
     return AES.encrypt(enc.Utf8.parse(texto), key).toString();
   }
@@ -70,5 +73,6 @@ export class Tab2Page {
   decryptoAES(texto, key) {
     return AES.decrypt(texto, key).toString(enc.Utf8);
   }
+   */
 
 }

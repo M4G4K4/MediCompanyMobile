@@ -8,7 +8,7 @@ import {Plugins} from '@capacitor/core';
 import {environment} from 'src/environments/environment';
 
 const { Storage } = Plugins;
-const TOKEN_KEY = 'my-token';
+const TOKEN = 'token';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class AuthenticationService {
   }
 
   async loadToken() {
-    const token = await Storage.get({ key: TOKEN_KEY });
+    const token = await Storage.get({ key: TOKEN });
     if (token && token.value) {
       console.log('set token: ', token.value);
       this.token = token.value;
@@ -36,7 +36,7 @@ export class AuthenticationService {
   login(credentials: {email; password}): Observable<any> {
     return this.http.post(environment.baseURL + '/login', credentials).pipe(
       map((data: any) => data.api_token),
-      switchMap(token => from(Storage.set({key: TOKEN_KEY, value: token}))),
+      switchMap(token => from(Storage.set({key: TOKEN, value: token}))),
       tap(_ => {
         this.isAuthenticated.next(true);
       })
@@ -47,7 +47,7 @@ export class AuthenticationService {
     console.log(credentialsRegister);
     return this.http.post(environment.baseURL + `/register`, credentialsRegister).pipe(
       map((data: any) => data.token),
-      switchMap(token => from(Storage.set({key: TOKEN_KEY, value: token}))),
+      switchMap(token => from(Storage.set({key: TOKEN, value: token}))),
       tap(_ => {
         this.isAuthenticated.next(true);
       })
@@ -63,6 +63,6 @@ export class AuthenticationService {
 
   logout(): Promise<void> {
     this.isAuthenticated.next(false);
-    return Storage.remove({key: TOKEN_KEY});
+    return Storage.remove({key: TOKEN});
   }
 }

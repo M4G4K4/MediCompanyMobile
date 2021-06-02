@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {Plugins} from '@capacitor/core';
 
 const { Storage } = Plugins;
-const HASH = 'hash';
+const KEY = 'KEY';
 
 @Component({
   selector: 'app-tab3',
@@ -12,13 +12,16 @@ const HASH = 'hash';
 export class Tab3Page {
   title = 'app';
   elementType = 'url';
-  value = 'Techiediaries';
+  value = 'key';
 
 
   constructor() {}
 
   // Ver como apenas chamar quando é aberta
-  ngOnInit() {
+  async ngOnInit() {
+    const key = await Storage.get({ key: KEY });
+    this.value = key.value;
+    console.log('Elementype: ' + this.elementType);
   }
 
 }
