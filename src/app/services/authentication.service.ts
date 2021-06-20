@@ -9,6 +9,7 @@ import {environment} from 'src/environments/environment';
 
 const { Storage } = Plugins;
 const TOKEN = 'token';
+const ID = 'id';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,6 @@ export class AuthenticationService {
 
   login(credentials: {email; password}): Observable<any> {
     return this.http.post(environment.baseURL + '/login', credentials).pipe(
-      map((data: any) => data.api_token),
-      switchMap(token => from(Storage.set({key: TOKEN, value: token}))),
       tap(_ => {
         this.isAuthenticated.next(true);
       })
@@ -47,7 +46,9 @@ export class AuthenticationService {
     console.log(credentialsRegister);
     return this.http.post(environment.baseURL + `/register`, credentialsRegister).pipe(
       map((data: any) => data.token),
-      switchMap(token => from(Storage.set({key: TOKEN, value: token}))),
+        switchMap(token => from(
+          Storage.set({key: TOKEN, value: token})
+        )),
       tap(_ => {
         this.isAuthenticated.next(true);
       })

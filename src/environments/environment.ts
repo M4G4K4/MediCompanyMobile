@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  baseURL: 'http://161.97.141.17:4444/api',
-
+  baseURL: 'http://rafaelpereira97.ddns.net:8000/api',
 };
 
 /*

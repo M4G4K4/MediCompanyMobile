@@ -25,7 +25,6 @@ var data = {
 })
 export class Tab1Page {
   credentialsSaveInfo: FormGroup;
-  //TODO: por as variaveis em object e mandar isso em vez do credentialsSaveInfo
 
   constructor(
     private fb: FormBuilder,
@@ -68,12 +67,18 @@ export class Tab1Page {
         .set('Authorization',  `Bearer ${token.value}`)
     };
     const body = await this.encryptData();
-    console.log(this.credentialsSaveInfo.value);
     this.authService.saveInfo(body,header).subscribe(
       async (res) => {
         await loading.dismiss();
+        console.log(res);
         console.log(res.patientFile);
-        this.router.navigateByUrl('/tabs', { replaceUrl: true });
+        const alert = await this.alertController.create({
+          header: 'Info',
+          message: 'Info encrypted and saved with success',
+          buttons: ['OK'],
+        });
+        await alert.present();
+        //this.router.navigateByUrl('/tabs', { replaceUrl: true });
       },
       async (res) => {
         await loading.dismiss();
@@ -94,26 +99,29 @@ export class Tab1Page {
   }
 
   async encryptData(){
-    data.fullName = await this.encrypt(this.credentialsSaveInfo.get('fullName'));
-    data.age = await this.encrypt(this.credentialsSaveInfo.get('age'));
-    data.sex = await this.encrypt(this.credentialsSaveInfo.get('sex'));
-    data.NIF = await this.encrypt(this.credentialsSaveInfo.get('NIF'));
-    console.log(data);
+    data.fullName = await this.encrypt(this.credentialsSaveInfo.get('fullName').value);
+    data.age = await this.encrypt(this.credentialsSaveInfo.get('age').value);
+    data.sex = await this.encrypt(this.credentialsSaveInfo.get('sex').value);
+    data.NIF = await this.encrypt(this.credentialsSaveInfo.get('NIF').value);
     return data;
   }
 
-  async encrypt(texto){
+  async encrypt(text){
     const key = await Storage.get({ key: KEY });
-    return this.cryptoAES(texto, key.value);
+    const ff = this.cryptoAES(text, key.value);
+    console.log('ENCRYPTED:' + ff);
+    return ff;
   }
 
-  cryptoAES(texto, key) {
-    return AES.encrypt(enc.Utf8.parse(texto), key).toString();
+  cryptoAES(text, key) {
+    return AES.encrypt(enc.Utf8.parse(text), key).toString();
   }
 
-  decryptoAES(texto, key) {
-    return AES.decrypt(texto, key).toString(enc.Utf8);
+  decryptoAES(text, key) {
+    return AES.decrypt(text, key).toString(enc.Utf8);
   }
+
+
 
   get fullName() {
     return this.credentialsSaveInfo.get('fullName');

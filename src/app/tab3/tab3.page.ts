@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {Plugins} from '@capacitor/core';
+import {environment} from '../../environments/environment';
 
 const { Storage } = Plugins;
 const KEY = 'KEY';
@@ -17,11 +18,10 @@ export class Tab3Page {
 
   constructor() {}
 
-  // Ver como apenas chamar quando é aberta
   async ngOnInit() {
     const key = await Storage.get({ key: KEY });
-    this.value = key.value;
-    console.log('Elementype: ' + this.elementType);
+    const id = await Storage.get({key: 'id'});
+    this.value = environment.baseURL + '/view/' + key.value + '/' + id.value;
   }
 
 }

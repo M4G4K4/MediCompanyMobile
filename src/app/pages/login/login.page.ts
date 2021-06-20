@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../services/authentication.service';
+import {Storage} from "@capacitor/core";
 
 @Component({
   selector: 'app-login',
@@ -22,8 +23,8 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.credentials = this.fb.group({
-      email: ['chiken@gmail.com', [Validators.required, Validators.email]],
-      password: ['jumbo', [Validators.required, Validators.minLength(4)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
     });
   }
 
@@ -33,6 +34,9 @@ export class LoginPage implements OnInit {
 
     this.authService.login(this.credentials.value).subscribe(
       async (res) => {
+        console.log(res);
+        await Storage.set({key: 'token', value: res.api_token});
+        await Storage.set({key: 'id', value: res.id});
         await loading.dismiss();
         this.router.navigateByUrl('/tabs', { replaceUrl: true });
       },

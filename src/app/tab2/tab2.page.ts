@@ -56,6 +56,7 @@ export class Tab2Page {
 
     console.log('KEY: ' + key);
     await Storage.set({key: KEY, value: key});
+    // alert
   }
 
   async keyAlreadyGenerated(){
